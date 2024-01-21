@@ -15,7 +15,7 @@ class PokemonRepositoryImpl(
     private val dataMapper: PokemonDataMapper
 ) : PokemonRepository {
     override fun getPokemonList(): Flow<List<Pokemon>> {
-        TODO("Not yet implemented")
+        TODO("Falta implementar")
     }
 
     override fun getPokemonDetail(pokemonName: String): Flow<Pokemon> = flow {

@@ -4,10 +4,9 @@ package com.example.pokedex.ui.screens
 
 
 import androidx.compose.runtime.Composable
-import com.example.pokedex.ui.viewmodels.PokemonListViewModel
 
 @Composable
-fun PokemonListScreen(viewModel: PokemonListViewModel) {
+fun PokemonListScreen(viewModel: (Any) -> Unit) {
     //lógica para mostrar la lista de Pokémon usando el ViewModel
     //Por ejemplo, observar un estado LiveData y componer la UI en base a eso.
 }
