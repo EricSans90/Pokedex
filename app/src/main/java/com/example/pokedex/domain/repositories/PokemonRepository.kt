@@ -10,5 +10,5 @@ interface PokemonRepository {
     fun getPokemonList(): Flow<List<Pokemon>>
 
     // Para obtener los detalles de un pokemon específico
-    fun getPokemonDetail(pokemonId: Int): Flow<Pokemon>
+    fun getPokemonDetail(pokemonId: String): Flow<Pokemon>
 }

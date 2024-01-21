@@ -14,6 +14,10 @@ class PokemonRepositoryImpl(
     private val remoteDataSource: PokemonRemoteDataSource,
     private val dataMapper: PokemonDataMapper
 ) : PokemonRepository {
+    override fun getPokemonList(): Flow<List<Pokemon>> {
+        TODO("Not yet implemented")
+    }
+
     override fun getPokemonDetail(pokemonName: String): Flow<Pokemon> = flow {
         val dto = remoteDataSource.getPokemonDetail(pokemonName)
         val domainModel = dataMapper.mapPokemonDTOToPokemon(dto)

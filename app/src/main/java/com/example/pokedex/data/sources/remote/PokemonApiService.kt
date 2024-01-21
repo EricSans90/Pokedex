@@ -10,8 +10,8 @@ import java.io.IOException
 class PokemonApiService(private val context: Context) {
     private val gson = Gson()
 
-    fun getPokemonDetail(pokemonName: String): PokemonDTO {
-        val json = loadJSONFromAsset(pokemonName)
+    fun getPokemonDetail(pokemonId: String): PokemonDTO {
+        val json = loadJSONFromAsset(pokemonId)
         return gson.fromJson(json, PokemonDTO::class.java)
     }
 
