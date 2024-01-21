@@ -13,7 +13,7 @@ data class Pokemon(
     val isDefault: Boolean,
     val locationAreaEncounters: String,
     val moves: List<Move>,
-    val sprites: Sprites,
+    val sprites: PokemonSprites,
     val name: String,
     val order:Int,
     val species: NamedApiResource,
