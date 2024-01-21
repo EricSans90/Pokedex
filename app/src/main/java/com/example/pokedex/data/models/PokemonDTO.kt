@@ -68,7 +68,7 @@ data class PokemonSpritesDTO(
     val back_shiny: String?,
     val back_female: String?,
     val back_shiny_female: String?
-    //Puede que falte alguno lo revisaré luego
+
 )
 
 data class PokemonStatDTO(
@@ -81,3 +81,4 @@ data class PokemonTypeDTO(
     val slot: Int,
     val type: NamedApiResourceDTO
 )
+
