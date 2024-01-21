@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
+//@HiltAndroidApp
 fun PokedexApp() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "pokemonList") {
