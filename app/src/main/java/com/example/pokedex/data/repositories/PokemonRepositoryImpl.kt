@@ -8,14 +8,17 @@ import com.example.pokedex.domain.repositories.PokemonRepository
 import com.example.pokedex.data.sources.remote.PokemonRemoteDataSource
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 
-class PokemonRepositoryImpl(
+class PokemonRepositoryImpl @Inject constructor(
     private val remoteDataSource: PokemonRemoteDataSource,
     private val dataMapper: PokemonDataMapper
 ) : PokemonRepository {
-    override fun getPokemonList(): Flow<List<Pokemon>> {
-        TODO("Falta implementar")
+    override fun getPokemonList(): Flow<List<Pokemon>> = flow {
+        val pokemonDtoList = remoteDataSource.getPokemonList()
+        val pokemonList = pokemonDtoList.map(dataMapper::mapPokemonDTOToPokemon)
+        emit(pokemonList)
     }
 
     override fun getPokemonDetail(pokemonName: String): Flow<Pokemon> = flow {
