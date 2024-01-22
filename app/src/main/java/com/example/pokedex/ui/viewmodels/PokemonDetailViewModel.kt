@@ -15,14 +15,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PokemonDetailViewModel @Inject constructor(
-    getPokemonDetailUseCase: GetPokemonDetailUseCase
+    private val getPokemonDetailUseCase: GetPokemonDetailUseCase
 ) : ViewModel() {
     private val _pokemonDetails = MutableStateFlow<Pokemon?>(null)
     val pokemonDetails = _pokemonDetails.asLiveData()
 
-    init {
+    fun loadPokemonDetails(pokemonName: String) {
         viewModelScope.launch {
-            _pokemonDetails.value = getPokemonDetailUseCase("ditto").firstOrNull()
+            _pokemonDetails.value = getPokemonDetailUseCase(pokemonName).firstOrNull()
         }
     }
 }
