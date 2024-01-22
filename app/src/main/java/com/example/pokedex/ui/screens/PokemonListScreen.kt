@@ -12,6 +12,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import com.example.pokedex.ui.viewmodels.PokemonListViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.pokedex.ui.components.PokemonListItem
 
 @Composable
 fun PokemonListScreen(onPokemonSelected: (String) -> Unit) {
@@ -22,7 +23,8 @@ fun PokemonListScreen(onPokemonSelected: (String) -> Unit) {
 
     LazyColumn {
         items(pokemonList.value) { pokemon ->
-            Text(text = pokemon.name, modifier = Modifier.clickable { onPokemonSelected(pokemon.name) })
+            //Text(text = pokemon.name, modifier = Modifier.clickable { onPokemonSelected(pokemon.name) })
+            PokemonListItem(pokemon)
         }
     }
 }
