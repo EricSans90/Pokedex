@@ -17,13 +17,15 @@ class PokemonRepositoryImpl @Inject constructor(
 ) : PokemonRepository {
     override fun getPokemonList(): Flow<List<Pokemon>> = flow {
         val pokemonDtoList = remoteDataSource.getPokemonList()
-        val pokemonList = pokemonDtoList.map(dataMapper::mapPokemonDTOToPokemon)
+        // Filtrar los nulos después de mapear
+        val pokemonList = pokemonDtoList.mapNotNull(dataMapper::mapPokemonDTOToPokemon)
         emit(pokemonList)
     }
 
     override fun getPokemonDetail(pokemonName: String): Flow<Pokemon> = flow {
         val dto = remoteDataSource.getPokemonDetail(pokemonName)
         val domainModel = dataMapper.mapPokemonDTOToPokemon(dto)
-        emit(domainModel)
+        // Manejar el caso en que domainModel sea null
+        domainModel?.let { emit(it) } ?: throw Exception("Pokemon no encontrado")
     }
 }

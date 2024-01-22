@@ -32,8 +32,8 @@ object ProvidingModule {
         return GetPokemonListUseCase(pokemonRepository)
     }
     @Provides
-    fun providePokemonApiService(@ApplicationContext context: Context): PokemonApiService {
-        return PokemonApiService(context)
+    fun providePokemonApiService(): PokemonApiService {
+        return PokemonApiService.create()
     }
 
     @Provides

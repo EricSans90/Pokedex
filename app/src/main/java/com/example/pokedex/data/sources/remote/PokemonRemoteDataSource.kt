@@ -6,9 +6,12 @@ import javax.inject.Inject
 //Fuente de datos remota para Pokémon
 
 class PokemonRemoteDataSource @Inject constructor(private val apiService: PokemonApiService) {
-    fun getPokemonList(): List<PokemonDTO> {
+    suspend fun getPokemonList(): List<PokemonDTO> {
+        val response = apiService.getPokemonList()
+        return response.results
+
         // Simular llamada a API leyendo el archivo JSON
-        return listOf(apiService.getPokemonDetail("ditto"))
+        //return listOf(apiService.getPokemonDetail("ditto"))
     }
     fun getPokemonDetail(pokemonName: String): PokemonDTO {
         return apiService.getPokemonDetail(pokemonName)

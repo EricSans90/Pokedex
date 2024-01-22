@@ -8,82 +8,105 @@ import com.example.pokedex.domain.models.*
 
 class PokemonDataMapper {
 
-    fun mapPokemonDTOToPokemon(dto: PokemonDTO): Pokemon {
-        return Pokemon(
-            abilities = dto.abilities.map { mapAbilityDTOToAbility(it) },
-            baseExperience = dto.base_experience,
-            forms = dto.forms.map { mapNamedApiResourceDTOToNamedApiResource(it) },
-            gameIndices = dto.game_indices.map { mapVersionGameIndexDTOToVersionGameIndex(it) },
-            height = dto.height,
-            heldItems = dto.held_items.map { mapHeldItemDTOToHeldItem(it) },
-            id = dto.id,
-            isDefault = dto.is_default,
-            locationAreaEncounters = dto.location_area_encounters,
-            moves = dto.moves.map { mapMoveDTOToMove(it) },
-            name = dto.name,
-            order = dto.order,
-            pastAbilities = dto.past_abilities.map { mapAbilityDTOToAbility(it) },
-            pastTypes = dto.past_types.map { mapPokemonTypeDTOToPokemonType(it) },
-            species = mapNamedApiResourceDTOToNamedApiResource(dto.species),
-            sprites = mapPokemonSpritesDTOToPokemonSprites(dto.sprites),
-            stats = dto.stats.map { mapPokemonStatDTOToPokemonStat(it) },
-            types = dto.types.map { mapPokemonTypeDTOToPokemonType(it) },
-            weight = dto.weight
-        )
+    fun mapPokemonDTOToPokemon(dto: PokemonDTO): Pokemon? {
+        return mapNamedApiResourceDTOToNamedApiResource(dto.species )?.let {
+            Pokemon(
+                abilities = dto.abilities?.mapNotNull { mapAbilityDTOToAbility(it) } ?: emptyList(),
+                baseExperience = dto.base_experience,
+                forms = dto.forms?.mapNotNull { mapNamedApiResourceDTOToNamedApiResource(it) } ?: emptyList(),
+                gameIndices = dto.game_indices?.mapNotNull { mapVersionGameIndexDTOToVersionGameIndex(it) } ?: emptyList(),
+                height = dto.height,
+                heldItems = dto.held_items?.mapNotNull { mapHeldItemDTOToHeldItem(it) } ?: emptyList(),
+                id = dto.id,
+                isDefault = dto.is_default,
+                locationAreaEncounters = dto.location_area_encounters,
+                moves = dto.moves?.mapNotNull { mapMoveDTOToMove(it) } ?: emptyList(),
+                name = dto.name,
+                order = dto.order,
+                pastAbilities = dto.past_abilities?.mapNotNull { mapAbilityDTOToAbility(it) } ?: emptyList(),
+                pastTypes = dto.past_types?.mapNotNull { mapPokemonTypeDTOToPokemonType(it) } ?: emptyList(),
+                species = it,
+                sprites = dto.sprites?.let { mapPokemonSpritesDTOToPokemonSprites(it) } ?: return null,
+                stats = dto.stats?.mapNotNull { mapPokemonStatDTOToPokemonStat(it) } ?: emptyList(),
+                types = dto.types?.mapNotNull { mapPokemonTypeDTOToPokemonType(it) } ?: emptyList(),
+                weight = dto.weight
+            )
+        }
     }
 
-    fun mapAbilityDTOToAbility(dto: PokemonAbilityDTO): Ability {
-        return Ability(
-            ability = mapNamedApiResourceDTOToNamedApiResource(dto.ability),
-            isHidden = dto.is_hidden,
-            slot = dto.slot
-        )
+    fun mapAbilityDTOToAbility(dto: PokemonAbilityDTO?): Ability? {
+        dto ?: return null
+        return mapNamedApiResourceDTOToNamedApiResource(dto.ability)?.let {
+            Ability(
+                ability = it,
+                isHidden = dto.is_hidden,
+                slot = dto.slot
+            )
+        }
     }
 
-    fun mapNamedApiResourceDTOToNamedApiResource(dto: NamedApiResourceDTO): NamedApiResource {
+    fun mapNamedApiResourceDTOToNamedApiResource(dto: NamedApiResourceDTO?): NamedApiResource? {
+        dto ?: return null
         return NamedApiResource(
             name = dto.name,
             url = dto.url
         )
     }
 
-    fun mapVersionGameIndexDTOToVersionGameIndex(dto: VersionGameIndexDTO): VersionGameIndex {
-        return VersionGameIndex(
-            gameIndex = dto.game_index,
-            version = mapNamedApiResourceDTOToNamedApiResource(dto.version)
-        )
+    fun mapVersionGameIndexDTOToVersionGameIndex(dto: VersionGameIndexDTO?): VersionGameIndex? {
+        dto ?: return null
+        return mapNamedApiResourceDTOToNamedApiResource(dto.version)?.let {
+            VersionGameIndex(
+                gameIndex = dto.game_index,
+                version = it
+            )
+        }
     }
 
-    fun mapHeldItemDTOToHeldItem(dto: PokemonHeldItemDTO): HeldItem {
-        return HeldItem(
-            item = mapNamedApiResourceDTOToNamedApiResource(dto.item),
-            versionDetails = dto.version_details.map { mapVersionDetailDTOToVersionDetail(it) }
-        )
+    fun mapHeldItemDTOToHeldItem(dto: PokemonHeldItemDTO?): HeldItem? {
+        dto ?: return null
+        return mapNamedApiResourceDTOToNamedApiResource(dto.item)?.let {
+            HeldItem(
+                item = it,
+                versionDetails = dto.version_details?.mapNotNull { mapVersionDetailDTOToVersionDetail(it) } ?: emptyList()
+            )
+        }
+    }
+    fun mapVersionDetailDTOToVersionDetail(dto: PokemonHeldItemVersionDTO?): VersionDetail? {
+        dto ?: return null
+        return mapNamedApiResourceDTOToNamedApiResource(dto.version)?.let {
+            VersionDetail(
+                rarity = dto.rarity,
+                version = it
+            )
+        }
     }
 
-    fun mapVersionDetailDTOToVersionDetail(dto: PokemonHeldItemVersionDTO): VersionDetail {
-        return VersionDetail(
-            rarity = dto.rarity,
-            version = mapNamedApiResourceDTOToNamedApiResource(dto.version)
-        )
+    fun mapMoveDTOToMove(dto: PokemonMoveDTO?): Move? {
+        dto ?: return null
+        return mapNamedApiResourceDTOToNamedApiResource(dto.move)?.let {
+            Move(
+                move = it,
+                versionGroupDetails = dto.version_group_details?.mapNotNull { mapVersionGroupDetailDTOToVersionGroupDetail(it) } ?: emptyList()
+            )
+        }
     }
 
-    fun mapMoveDTOToMove(dto: PokemonMoveDTO): Move {
-        return Move(
-            move = mapNamedApiResourceDTOToNamedApiResource(dto.move),
-            versionGroupDetails = dto.version_group_details.map { mapVersionGroupDetailDTOToVersionGroupDetail(it) }
-        )
+    fun mapVersionGroupDetailDTOToVersionGroupDetail(dto: PokemonMoveVersionDTO?): VersionGroupDetail? {
+        dto ?: return null
+        return mapNamedApiResourceDTOToNamedApiResource(dto.move_learn_method)?.let {
+            mapNamedApiResourceDTOToNamedApiResource(dto.version_group)?.let { it1 ->
+                VersionGroupDetail(
+                    levelLearnedAt = dto.level_learned_at,
+                    moveLearnMethod = it,
+                    versionGroup = it1
+                )
+            }
+        }
     }
 
-    fun mapVersionGroupDetailDTOToVersionGroupDetail(dto: PokemonMoveVersionDTO): VersionGroupDetail {
-        return VersionGroupDetail(
-            levelLearnedAt = dto.level_learned_at,
-            moveLearnMethod = mapNamedApiResourceDTOToNamedApiResource(dto.move_learn_method),
-            versionGroup = mapNamedApiResourceDTOToNamedApiResource(dto.version_group)
-        )
-    }
-
-    fun mapPokemonSpritesDTOToPokemonSprites(dto: PokemonSpritesDTO): PokemonSprites {
+    fun mapPokemonSpritesDTOToPokemonSprites(dto: PokemonSpritesDTO?): PokemonSprites? {
+        dto ?: return null
         return PokemonSprites(
             backDefault = dto.back_default,
             backFemale = dto.back_female,
@@ -106,14 +129,16 @@ class PokemonDataMapper {
         )
     }
 
-    fun mapDreamWorldSpritesDTOToDreamWorldSprites(dto: DreamWorldSpritesDTO): DreamWorldSprites {
+    fun mapDreamWorldSpritesDTOToDreamWorldSprites(dto: DreamWorldSpritesDTO?): DreamWorldSprites? {
+        dto ?: return null
         return DreamWorldSprites(
             frontDefault = dto.front_default,
             frontFemale = dto.front_female
         )
     }
 
-    fun mapHomeSpritesDTOToHomeSprites(dto: HomeSpritesDTO): HomeSprites {
+    fun mapHomeSpritesDTOToHomeSprites(dto: HomeSpritesDTO?): HomeSprites? {
+        dto ?: return null
         return HomeSprites(
             frontDefault = dto.front_default,
             frontFemale = dto.front_female,
@@ -122,26 +147,33 @@ class PokemonDataMapper {
         )
     }
 
-    fun mapOfficialArtworkSpritesDTOToOfficialArtworkSprites(dto: OfficialArtworkSpritesDTO): OfficialArtworkSprites {
+    fun mapOfficialArtworkSpritesDTOToOfficialArtworkSprites(dto: OfficialArtworkSpritesDTO?): OfficialArtworkSprites? {
+        dto ?: return null
         return OfficialArtworkSprites(
             frontDefault = dto.front_default,
             frontShiny = dto.front_shiny
         )
     }
 
-    fun mapPokemonStatDTOToPokemonStat(dto: PokemonStatDTO): PokemonStat {
-        return PokemonStat(
-            baseStat = dto.base_stat,
-            effort = dto.effort,
-            stat = mapNamedApiResourceDTOToNamedApiResource(dto.stat)
-        )
+    fun mapPokemonStatDTOToPokemonStat(dto: PokemonStatDTO?): PokemonStat? {
+        dto ?: return null
+        return mapNamedApiResourceDTOToNamedApiResource(dto.stat)?.let {
+            PokemonStat(
+                baseStat = dto.base_stat,
+                effort = dto.effort,
+                stat = it
+            )
+        }
     }
 
-    fun mapPokemonTypeDTOToPokemonType(dto: PokemonTypeDTO): PokemonType {
-        return PokemonType(
-            slot = dto.slot,
-            type = mapNamedApiResourceDTOToNamedApiResource(dto.type)
-        )
+    fun mapPokemonTypeDTOToPokemonType(dto: PokemonTypeDTO?): PokemonType? {
+        dto ?: return null
+        return mapNamedApiResourceDTOToNamedApiResource(dto.type)?.let {
+            PokemonType(
+                slot = dto.slot,
+                type = it
+            )
+        }
     }
 
     fun mapGenerationSpritesDTOToGenerationSprites(dto: VersionsSpritesDTO): GenerationSprites {
@@ -164,26 +196,30 @@ class PokemonDataMapper {
         )
     }
 
-    fun mapRedBlueSpritesDTOToRedBlueSprites(dto: RedBlueSpritesDTO): RedBlueSprites {
-        return RedBlueSprites(
-            backDefault = dto.back_default,
-            backGray = dto.back_gray,
-            backTransparent = dto.back_transparent,
-            frontDefault = dto.front_default,
-            frontGray = dto.front_gray,
-            frontTransparent = dto.front_transparent
-        )
+    fun mapRedBlueSpritesDTOToRedBlueSprites(dto: RedBlueSpritesDTO?): RedBlueSprites? {
+        return dto?.let {
+            RedBlueSprites(
+                backDefault = it.back_default,
+                backGray = it.back_gray,
+                backTransparent = it.back_transparent,
+                frontDefault = it.front_default,
+                frontGray = it.front_gray,
+                frontTransparent = it.front_transparent
+            )
+        }
     }
 
-    fun mapYellowSpritesDTOToYellowSprites(dto: YellowSpritesDTO): YellowSprites {
-        return YellowSprites(
-            backDefault = dto.back_default,
-            backGray = dto.back_gray,
-            backTransparent = dto.back_transparent,
-            frontDefault = dto.front_default,
-            frontGray = dto.front_gray,
-            frontTransparent = dto.front_transparent
-        )
+    fun mapYellowSpritesDTOToYellowSprites(dto: YellowSpritesDTO?): YellowSprites? {
+        return dto?.let {
+            YellowSprites(
+                backDefault = it.back_default,
+                backGray = it.back_gray,
+                backTransparent = it.back_transparent,
+                frontDefault = it.front_default,
+                frontGray = it.front_gray,
+                frontTransparent = it.front_transparent
+            )
+        }
     }
 
     fun mapGenerationIISpritesDTOToGenerationIISprites(dto: GenerationIISpritesDTO): GenerationIISprites {
@@ -194,27 +230,31 @@ class PokemonDataMapper {
         )
     }
 
-    fun mapCrystalSpritesDTOToCrystalSprites(dto: CrystalSpritesDTO): CrystalSprites {
-        return CrystalSprites(
-            backDefault = dto.back_default,
-            backShiny = dto.back_shiny,
-            backShinyTransparent = dto.back_shiny_transparent,
-            backTransparent = dto.back_transparent,
-            frontDefault = dto.front_default,
-            frontShiny = dto.front_shiny,
-            frontShinyTransparent = dto.front_shiny_transparent,
-            frontTransparent = dto.front_transparent
-        )
+    fun mapCrystalSpritesDTOToCrystalSprites(dto: CrystalSpritesDTO?): CrystalSprites? {
+        return dto?.let {
+            CrystalSprites(
+                backDefault = it.back_default,
+                backShiny = it.back_shiny,
+                backShinyTransparent = it.back_shiny_transparent,
+                backTransparent = it.back_transparent,
+                frontDefault = it.front_default,
+                frontShiny = it.front_shiny,
+                frontShinyTransparent = it.front_shiny_transparent,
+                frontTransparent = it.front_transparent
+            )
+        }
     }
 
-    fun mapGoldSilverSpritesDTOToGoldSilverSprites(dto: GoldSilverSpritesDTO): GoldSilverSprites {
-        return GoldSilverSprites(
-            backDefault = dto.back_default,
-            backShiny = dto.back_shiny,
-            frontDefault = dto.front_default,
-            frontShiny = dto.front_shiny,
-            frontTransparent = dto.front_transparent
-        )
+    fun mapGoldSilverSpritesDTOToGoldSilverSprites(dto: GoldSilverSpritesDTO?): GoldSilverSprites? {
+        return dto?.let {
+            GoldSilverSprites(
+                backDefault = it.back_default,
+                backShiny = it.back_shiny,
+                frontDefault = it.front_default,
+                frontShiny = it.front_shiny,
+                frontTransparent = it.front_transparent
+            )
+        }
     }
 
     fun mapGenerationIIISpritesDTOToGenerationIIISprites(dto: GenerationIIISpritesDTO): GenerationIIISprites {
@@ -225,29 +265,34 @@ class PokemonDataMapper {
         )
     }
 
-    fun mapEmeraldSpritesDTOToEmeraldSprites(dto: EmeraldSpritesDTO): EmeraldSprites {
-        return EmeraldSprites(
-            frontDefault = dto.front_default,
-            frontShiny = dto.front_shiny
-        )
+    fun mapEmeraldSpritesDTOToEmeraldSprites(dto: EmeraldSpritesDTO?): EmeraldSprites? {
+        return dto?.let {
+            EmeraldSprites(
+                frontDefault = it.front_default,
+                frontShiny = it.front_shiny
+            )
+        }
+    }
+    fun mapFireRedLeafGreenSpritesDTOToFireRedLeafGreenSprites(dto: FireRedLeafGreenSpritesDTO?): FireRedLeafGreenSprites? {
+        return dto?.let {
+            FireRedLeafGreenSprites(
+                backDefault = it.back_default,
+                backShiny = it.back_shiny,
+                frontDefault = it.front_default,
+                frontShiny = it.front_shiny
+            )
+        }
     }
 
-    fun mapFireRedLeafGreenSpritesDTOToFireRedLeafGreenSprites(dto: FireRedLeafGreenSpritesDTO): FireRedLeafGreenSprites {
-        return FireRedLeafGreenSprites(
-            backDefault = dto.back_default,
-            backShiny = dto.back_shiny,
-            frontDefault = dto.front_default,
-            frontShiny = dto.front_shiny
-        )
-    }
-
-    fun mapRubySapphireSpritesDTOToRubySapphireSprites(dto: RubySapphireSpritesDTO): RubySapphireSprites {
-        return RubySapphireSprites(
-            backDefault = dto.back_default,
-            backShiny = dto.back_shiny,
-            frontDefault = dto.front_default,
-            frontShiny = dto.front_shiny
-        )
+    fun mapRubySapphireSpritesDTOToRubySapphireSprites(dto: RubySapphireSpritesDTO?): RubySapphireSprites? {
+        return dto?.let {
+            RubySapphireSprites(
+                backDefault = it.back_default,
+                backShiny = it.back_shiny,
+                frontDefault = it.front_default,
+                frontShiny = it.front_shiny
+            )
+        }
     }
 
     fun mapGenerationIVSpritesDTOToGenerationIVSprites(dto: GenerationIVSpritesDTO): GenerationIVSprites {
@@ -258,43 +303,49 @@ class PokemonDataMapper {
         )
     }
 
-    fun mapDiamondPearlSpritesDTOToDiamondPearlSprites(dto: DiamondPearlSpritesDTO): DiamondPearlSprites {
-        return DiamondPearlSprites(
-            backDefault = dto.back_default,
-            backFemale = dto.back_female,
-            backShiny = dto.back_shiny,
-            backShinyFemale = dto.back_shiny_female,
-            frontDefault = dto.front_default,
-            frontFemale = dto.front_female,
-            frontShiny = dto.front_shiny,
-            frontShinyFemale = dto.front_shiny_female
-        )
+    fun mapDiamondPearlSpritesDTOToDiamondPearlSprites(dto: DiamondPearlSpritesDTO?): DiamondPearlSprites? {
+        return dto?.let {
+            DiamondPearlSprites(
+                backDefault = it.back_default,
+                backFemale = it.back_female,
+                backShiny = it.back_shiny,
+                backShinyFemale = it.back_shiny_female,
+                frontDefault = it.front_default,
+                frontFemale = it.front_female,
+                frontShiny = it.front_shiny,
+                frontShinyFemale = it.front_shiny_female
+            )
+        }
     }
 
-    fun mapHeartGoldSoulSilverSpritesDTOToHeartGoldSoulSilverSprites(dto: HeartGoldSoulSilverSpritesDTO): HeartGoldSoulSilverSprites {
-        return HeartGoldSoulSilverSprites(
-            backDefault = dto.back_default,
-            backFemale = dto.back_female,
-            backShiny = dto.back_shiny,
-            backShinyFemale = dto.back_shiny_female,
-            frontDefault = dto.front_default,
-            frontFemale = dto.front_female,
-            frontShiny = dto.front_shiny,
-            frontShinyFemale = dto.front_shiny_female
-        )
+    fun mapHeartGoldSoulSilverSpritesDTOToHeartGoldSoulSilverSprites(dto: HeartGoldSoulSilverSpritesDTO?): HeartGoldSoulSilverSprites? {
+        return dto?.let {
+            HeartGoldSoulSilverSprites(
+                backDefault = it.back_default,
+                backFemale = it.back_female,
+                backShiny = it.back_shiny,
+                backShinyFemale = it.back_shiny_female,
+                frontDefault = it.front_default,
+                frontFemale = it.front_female,
+                frontShiny = it.front_shiny,
+                frontShinyFemale = it.front_shiny_female
+            )
+        }
     }
 
-    fun mapPlatinumSpritesDTOToPlatinumSprites(dto: PlatinumSpritesDTO): PlatinumSprites {
-        return PlatinumSprites(
-            backDefault = dto.back_default,
-            backFemale = dto.back_female,
-            backShiny = dto.back_shiny,
-            backShinyFemale = dto.back_shiny_female,
-            frontDefault = dto.front_default,
-            frontFemale = dto.front_female,
-            frontShiny = dto.front_shiny,
-            frontShinyFemale = dto.front_shiny_female
-        )
+    fun mapPlatinumSpritesDTOToPlatinumSprites(dto: PlatinumSpritesDTO?): PlatinumSprites? {
+        return dto?.let {
+            PlatinumSprites(
+                backDefault = it.back_default,
+                backFemale = it.back_female,
+                backShiny = it.back_shiny,
+                backShinyFemale = it.back_shiny_female,
+                frontDefault = it.front_default,
+                frontFemale = it.front_female,
+                frontShiny = it.front_shiny,
+                frontShinyFemale = it.front_shiny_female
+            )
+        }
     }
 
     fun mapGenerationVSpritesDTOToGenerationVSprites(dto: GenerationVSpritesDTO): GenerationVSprites {
@@ -303,31 +354,35 @@ class PokemonDataMapper {
         )
     }
 
-    fun mapBlackWhiteSpritesDTOToBlackWhiteSprites(dto: BlackWhiteSpritesDTO): BlackWhiteSprites {
-        return BlackWhiteSprites(
-            animated = dto.animated?.let { mapAnimatedSpritesDTOToAnimatedSprites(it) },
-            backDefault = dto.back_default,
-            backFemale = dto.back_female,
-            backShiny = dto.back_shiny,
-            backShinyFemale = dto.back_shiny_female,
-            frontDefault = dto.front_default,
-            frontFemale = dto.front_female,
-            frontShiny = dto.front_shiny,
-            frontShinyFemale = dto.front_shiny_female
-        )
+    fun mapBlackWhiteSpritesDTOToBlackWhiteSprites(dto: BlackWhiteSpritesDTO?): BlackWhiteSprites? {
+        return dto?.let {
+            BlackWhiteSprites(
+                animated = it.animated?.let { animDto -> mapAnimatedSpritesDTOToAnimatedSprites(animDto) },
+                backDefault = it.back_default,
+                backFemale = it.back_female,
+                backShiny = it.back_shiny,
+                backShinyFemale = it.back_shiny_female,
+                frontDefault = it.front_default,
+                frontFemale = it.front_female,
+                frontShiny = it.front_shiny,
+                frontShinyFemale = it.front_shiny_female
+            )
+        }
     }
 
-    fun mapAnimatedSpritesDTOToAnimatedSprites(dto: AnimatedSpritesDTO): AnimatedSprites {
-        return AnimatedSprites(
-            backDefault = dto.back_default,
-            backFemale = dto.back_female,
-            backShiny = dto.back_shiny,
-            backShinyFemale = dto.back_shiny_female,
-            frontDefault = dto.front_default,
-            frontFemale = dto.front_female,
-            frontShiny = dto.front_shiny,
-            frontShinyFemale = dto.front_shiny_female
-        )
+    fun mapAnimatedSpritesDTOToAnimatedSprites(dto: AnimatedSpritesDTO?): AnimatedSprites? {
+        return dto?.let {
+            AnimatedSprites(
+                backDefault = it.back_default,
+                backFemale = it.back_female,
+                backShiny = it.back_shiny,
+                backShinyFemale = it.back_shiny_female,
+                frontDefault = it.front_default,
+                frontFemale = it.front_female,
+                frontShiny = it.front_shiny,
+                frontShinyFemale = it.front_shiny_female
+            )
+        }
     }
 
     fun mapGenerationVISpritesDTOToGenerationVISprites(dto: GenerationVISpritesDTO): GenerationVISprites {
@@ -337,51 +392,63 @@ class PokemonDataMapper {
         )
     }
 
-    fun mapOmegarubyAlphasapphireSpritesDTOToOmegarubyAlphasapphireSprites(dto: OmegarubyAlphasapphireSpritesDTO): OmegarubyAlphasapphireSprites {
-        return OmegarubyAlphasapphireSprites(
-            frontDefault = dto.front_default,
-            frontFemale = dto.front_female,
-            frontShiny = dto.front_shiny,
-            frontShinyFemale = dto.front_shiny_female
-        )
+    fun mapOmegarubyAlphasapphireSpritesDTOToOmegarubyAlphasapphireSprites(dto: OmegarubyAlphasapphireSpritesDTO?): OmegarubyAlphasapphireSprites? {
+        return dto?.let {
+            OmegarubyAlphasapphireSprites(
+                frontDefault = it.front_default,
+                frontFemale = it.front_female,
+                frontShiny = it.front_shiny,
+                frontShinyFemale = it.front_shiny_female
+            )
+        }
     }
 
-    fun mapXYSpritesDTOToXYSprites(dto: XYSpritesDTO): XYSprites {
-        return XYSprites(
-            frontDefault = dto.front_default,
-            frontFemale = dto.front_female,
-            frontShiny = dto.front_shiny,
-            frontShinyFemale = dto.front_shiny_female
-        )
+    fun mapXYSpritesDTOToXYSprites(dto: XYSpritesDTO?): XYSprites? {
+        return dto?.let {
+            XYSprites(
+                frontDefault = it.front_default,
+                frontFemale = it.front_female,
+                frontShiny = it.front_shiny,
+                frontShinyFemale = it.front_shiny_female
+            )
+        }
     }
 
-    fun mapGenerationVIISpritesDTOToGenerationVIISprites(dto: GenerationVIISpritesDTO): GenerationVIISprites {
-        return GenerationVIISprites(
-            icons = dto.icons?.let { mapIconsSpritesDTOToIconsSprites(it) },
-            ultraSunUltraMoon = dto.ultra_sun_ultra_moon?.let { mapUltraSunUltraMoonSpritesDTOToUltraSunUltraMoonSprites(it) }
-        )
+    fun mapGenerationVIISpritesDTOToGenerationVIISprites(dto: GenerationVIISpritesDTO?): GenerationVIISprites? {
+        return dto?.let {
+            GenerationVIISprites(
+                icons = it.icons?.let { iconsDto -> mapIconsSpritesDTOToIconsSprites(iconsDto) },
+                ultraSunUltraMoon = it.ultra_sun_ultra_moon?.let { usumDto -> mapUltraSunUltraMoonSpritesDTOToUltraSunUltraMoonSprites(usumDto) }
+            )
+        }
     }
 
-    fun mapIconsSpritesDTOToIconsSprites(dto: IconsSpritesDTO): IconsSprites {
-        return IconsSprites(
-            frontDefault = dto.front_default,
-            frontFemale = dto.front_female
-        )
+    fun mapIconsSpritesDTOToIconsSprites(dto: IconsSpritesDTO?): IconsSprites? {
+        return dto?.let {
+            IconsSprites(
+                frontDefault = it.front_default,
+                frontFemale = it.front_female
+            )
+        }
     }
 
-    fun mapUltraSunUltraMoonSpritesDTOToUltraSunUltraMoonSprites(dto: UltraSunUltraMoonSpritesDTO): UltraSunUltraMoonSprites {
-        return UltraSunUltraMoonSprites(
-            frontDefault = dto.front_default,
-            frontFemale = dto.front_female,
-            frontShiny = dto.front_shiny,
-            frontShinyFemale = dto.front_shiny_female
-        )
+    fun mapUltraSunUltraMoonSpritesDTOToUltraSunUltraMoonSprites(dto: UltraSunUltraMoonSpritesDTO?): UltraSunUltraMoonSprites? {
+        return dto?.let {
+            UltraSunUltraMoonSprites(
+                frontDefault = it.front_default,
+                frontFemale = it.front_female,
+                frontShiny = it.front_shiny,
+                frontShinyFemale = it.front_shiny_female
+            )
+        }
     }
 
-    fun mapGenerationVIIISpritesDTOToGenerationVIIISprites(dto: GenerationVIIISpritesDTO): GenerationVIIISprites {
-        return GenerationVIIISprites(
-            icons = dto.icons?.let { mapIconsSpritesDTOToIconsSprites(it) }
-        )
+    fun mapGenerationVIIISpritesDTOToGenerationVIIISprites(dto: GenerationVIIISpritesDTO?): GenerationVIIISprites? {
+        return dto?.let {
+            GenerationVIIISprites(
+                icons = it.icons?.let { iconsDto -> mapIconsSpritesDTOToIconsSprites(iconsDto) }
+            )
+        }
     }
 
 }
