@@ -11,8 +11,21 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import androidx.lifecycle.asLiveData
 import javax.inject.Inject
 
+// Para ditto
+@HiltViewModel
+class PokemonDetailViewModel @Inject constructor(
+    private val getPokemonDetailUseCase: GetPokemonDetailUseCase
+) : ViewModel() {
+
+    fun getPokemonDetail(pokemonId: String) = getPokemonDetailUseCase.execute(pokemonId).asLiveData()
+}
+
+
+// Para API
+/*
 @HiltViewModel
 class PokemonDetailViewModel @Inject constructor(
     private val getPokemonDetailUseCase: GetPokemonDetailUseCase
@@ -26,3 +39,4 @@ class PokemonDetailViewModel @Inject constructor(
         }
     }
 }
+ */

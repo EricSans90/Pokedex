@@ -16,15 +16,13 @@ import com.example.pokedex.data.sources.remote.PokemonApiService
 
 @Composable
 fun PokemonDetailScreen(pokemonName: String) {
-    //lógica para mostrar los detalles del Pokémon usando el ViewModel
     val viewModel: PokemonDetailViewModel = hiltViewModel()
-    viewModel.loadPokemonDetails(pokemonName)
-    // Usar observeAsState para LiveData
-    val pokemon by viewModel.pokemonDetails.observeAsState()
+    val pokemon by viewModel.getPokemonDetail(pokemonName).observeAsState()
 
     pokemon?.let { currentPokemon ->
         PokemonDetailView(pokemon = currentPokemon)
     }
+}
     /*
     //Para probar si funciona:
 
@@ -35,7 +33,7 @@ fun PokemonDetailScreen(pokemonName: String) {
     Text(text = "Pokemon: ${pokemonDto.name}")
 
     //efectivamente sí funciona
-    */
-}
 
+}
+*/
 
