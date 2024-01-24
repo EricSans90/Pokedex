@@ -119,7 +119,7 @@ fun PokemonDetailView(pokemon: Pokemon, navController: NavController) {
             horizontalArrangement = Arrangement.Center,){
             Text(text = "${pokemon.name}",
                 color = Color.White,
-                fontFamily = FontFamily(Font(R.font.aliviaregular)),
+                fontFamily = FontFamily(Font(R.font.pokemonhollow)),
                 fontSize = 45.sp
             )
         }

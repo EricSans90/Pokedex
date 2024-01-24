@@ -58,3 +58,5 @@ val PokemonTypeColors = mapOf(
     "dark" to Color(0xFF595761),
     "fairy" to Color(0xFFEE90E6)
 )
+
+val redList = Color(0xFFB63228)
