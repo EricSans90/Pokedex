@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.example.pokedex.R
 import com.example.pokedex.domain.models.Pokemon
@@ -55,7 +56,7 @@ import com.example.pokedex.ui.theme.backGr
 import java.util.Locale
 
 @Composable
-fun PokemonDetailView(pokemon: Pokemon) {
+fun PokemonDetailView(pokemon: Pokemon, navController: NavController) {
     // UI para mostrar el detalle de un Pokemon
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -78,7 +79,7 @@ fun PokemonDetailView(pokemon: Pokemon) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Row() {
-                        IconButton(onClick = {/* navegacion al menú */ }) {
+                        IconButton(onClick = {navController.navigate("pokemonList") }) {
                             Icon(
                                 Icons.Default.ArrowBack,
                                 contentDescription = null,

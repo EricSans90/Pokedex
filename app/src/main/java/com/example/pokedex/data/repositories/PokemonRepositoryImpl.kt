@@ -21,7 +21,7 @@ class PokemonRepositoryImpl @Inject constructor(
     private val dataMapper: PokemonDataMapper
 ) : PokemonRepository {
 
-    // Asumiendo que ditto.json está en la carpeta assets
+    // Asumiendo que ditto.json está en la carpeta assets, que lo está
     private fun getDittoJson(): String {
         val inputStream = javaClass.classLoader?.getResourceAsStream("assets/ditto.json")
         val reader = InputStreamReader(inputStream)

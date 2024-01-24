@@ -12,15 +12,16 @@ import com.example.pokedex.ui.viewmodels.PokemonDetailViewModel
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.pokedex.data.sources.remote.PokemonApiService
 
 @Composable
-fun PokemonDetailScreen(pokemonName: String) {
+fun PokemonDetailScreen(pokemonName: String, navController: NavController) {
     val viewModel: PokemonDetailViewModel = hiltViewModel()
     val pokemon by viewModel.getPokemonDetail(pokemonName).observeAsState()
 
     pokemon?.let { currentPokemon ->
-        PokemonDetailView(pokemon = currentPokemon)
+        PokemonDetailView(pokemon = currentPokemon,  navController = navController)
     }
 }
     /*

@@ -40,13 +40,15 @@ fun PokedexNavigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "pokemonList") {
         composable("pokemonList") {
-            PokemonListScreen() { pokemonName ->
+            PokemonListScreen(onPokemonSelected = { pokemonName ->
                 navController.navigate("pokemonDetail/$pokemonName")
-            }
+            })
         }
         composable("pokemonDetail/{pokemonName}") { backStackEntry ->
-            val pokemonName = backStackEntry.arguments?.getString("pokemonName") ?: ""
-            PokemonDetailScreen(pokemonName)
+            PokemonDetailScreen(
+                pokemonName = backStackEntry.arguments?.getString("pokemonName") ?: "",
+                navController = navController
+            )
         }
     }
 }
