@@ -62,6 +62,6 @@ object ViewModelModule {
         @ApplicationContext context: Context,
         pokemonRepository: PokemonRepository
     ): GetPokemonListUseCase {
-        return GetPokemonListUseCase(context, pokemonRepository)
+        return GetPokemonListUseCase(pokemonRepository)
     }
 }

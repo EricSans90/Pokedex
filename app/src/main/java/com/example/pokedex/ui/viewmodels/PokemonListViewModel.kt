@@ -3,8 +3,11 @@ package com.example.pokedex.ui.viewmodels
 //Para manejar el estado de la lista de Pokémon
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.liveData
+import com.example.pokedex.domain.models.Pokemon
 import com.example.pokedex.domain.usecases.GetPokemonListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -15,15 +18,7 @@ class PokemonListViewModel @Inject constructor(
     private val getPokemonListUseCase: GetPokemonListUseCase
 ) : ViewModel() {
 
-    val pokemonList = getPokemonListUseCase.execute().asLiveData()
+    val pokemonList: LiveData<List<Pokemon>> = liveData {
+        emit(getPokemonListUseCase.execute())
+    }
 }
-
-/* Para API
-@HiltViewModel
-class PokemonListViewModel @Inject constructor(
-    private val getPokemonListUseCase: GetPokemonListUseCase
-) : ViewModel() {
-    // Lógica para obtener la lista de pokémon y ponerla en la UI
-    val pokemonList = getPokemonListUseCase.execute().asLiveData(viewModelScope.coroutineContext)
-}
- */

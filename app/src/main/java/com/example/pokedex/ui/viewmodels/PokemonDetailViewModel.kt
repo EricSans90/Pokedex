@@ -20,23 +20,7 @@ class PokemonDetailViewModel @Inject constructor(
     private val getPokemonDetailUseCase: GetPokemonDetailUseCase
 ) : ViewModel() {
 
-    fun getPokemonDetail(pokemonId: String) = getPokemonDetailUseCase.execute(pokemonId).asLiveData()
-}
-
-
-// Para API
-/*
-@HiltViewModel
-class PokemonDetailViewModel @Inject constructor(
-    private val getPokemonDetailUseCase: GetPokemonDetailUseCase
-) : ViewModel() {
-    private val _pokemonDetails = MutableStateFlow<Pokemon?>(null)
-    val pokemonDetails = _pokemonDetails.asLiveData()
-
-    fun loadPokemonDetails(pokemonName: String) {
-        viewModelScope.launch {
-            _pokemonDetails.value = getPokemonDetailUseCase(pokemonName).firstOrNull()
-        }
+    fun getPokemonDetail(pokemonId: String): LiveData<Pokemon> = liveData {
+        emit(getPokemonDetailUseCase.execute(pokemonId))
     }
 }
- */

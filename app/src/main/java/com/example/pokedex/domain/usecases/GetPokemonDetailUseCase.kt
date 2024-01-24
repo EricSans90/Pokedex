@@ -4,13 +4,21 @@ package com.example.pokedex.domain.usecases
 
 import com.example.pokedex.domain.models.Pokemon
 import com.example.pokedex.domain.repositories.PokemonRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 
+// Interactuar con el repositorio para obtener los detalles de un Pokémon
 class GetPokemonDetailUseCase(private val pokemonRepository: PokemonRepository) {
-    fun execute(pokemonId: String): Flow<Pokemon> {
+    suspend fun execute(pokemonId: String): Pokemon {
         // Lógica para obtener los detalles de un Pokémon específico
-        // Por ahora, simplemente devolveremos Ditto desde el repositorio
-        return pokemonRepository.getPokemonDetail(pokemonId)
+        // Por ahora, devuelvo Ditto desde el repositorio
+        // first() devuelve el primer valor emitido por el flow
+        return withContext(Dispatchers.IO) {
+            pokemonRepository.getPokemonDetail(pokemonId).first()
+        }
     }
 }
