@@ -51,18 +51,8 @@ class PokemonRepositoryImpl @Inject constructor(
         val reader = InputStreamReader(inputStream)
         return reader.readText()
     }
-
-
-    fun loadPokemonFromAssets(context: Context): Pokemon? {
-        val inputStream = context.assets.open("ditto.json")
-        val size = inputStream.available()
-        val buffer = ByteArray(size)
-        inputStream.read(buffer)
-        inputStream.close()
-        val json = String(buffer, Charsets.UTF_8)
-        return Gson().fromJson(json, Pokemon::class.java)
-    }
 }
+
 
 /*
     override fun getPokemonList(): Flow<List<Pokemon>> = flow {
@@ -79,4 +69,15 @@ class PokemonRepositoryImpl @Inject constructor(
             emit(mappedData)
         }
     }
+
+    fun loadPokemonFromAssets(context: Context): Pokemon? {
+        val inputStream = context.assets.open("ditto.json")
+        val size = inputStream.available()
+        val buffer = ByteArray(size)
+        inputStream.read(buffer)
+        inputStream.close()
+        val json = String(buffer, Charsets.UTF_8)
+        return Gson().fromJson(json, Pokemon::class.java)
+    }
+
  */
