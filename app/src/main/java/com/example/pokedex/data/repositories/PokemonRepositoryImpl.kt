@@ -54,7 +54,7 @@ class PokemonRepositoryImpl @Inject constructor(
 }
 
 
-/*
+/* Antes de pasar la lógica de leer ditto.json a PokemonLocalDataSource
     override fun getPokemonList(): Flow<List<Pokemon>> = flow {
         val localData = loadPokemonFromAssets(context)
 
