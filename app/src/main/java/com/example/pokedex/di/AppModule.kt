@@ -6,6 +6,7 @@ import dagger.Binds
 import dagger.Module
 import android.content.Context
 import com.example.pokedex.data.mappers.PokemonDataMapper
+import com.example.pokedex.data.sources.local.PokemonLocalDataSource
 import com.example.pokedex.data.sources.remote.PokemonApiService
 import com.example.pokedex.data.sources.remote.PokemonRemoteDataSource
 import com.example.pokedex.domain.usecases.GetPokemonDetailUseCase
@@ -51,6 +52,11 @@ object ProvidingModule {
     @Provides
     fun provideContext(@ApplicationContext appContext: Context): Context {
         return appContext
+    }
+
+    @Provides
+    fun providePokemonLocalDataSource(context: Context): PokemonLocalDataSource {
+        return PokemonLocalDataSource(context)
     }
 }
 
