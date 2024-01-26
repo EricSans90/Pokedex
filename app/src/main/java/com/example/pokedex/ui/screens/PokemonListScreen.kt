@@ -2,7 +2,6 @@ package com.example.pokedex.ui.screens
 
 //Para mostrar la lista de Pokémon
 
-
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,7 +9,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import com.example.pokedex.ui.viewmodels.PokemonListViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.pokedex.ui.components.PokemonListItem
@@ -29,6 +27,4 @@ fun PokemonListScreen(onPokemonSelected: (String) -> Unit) {
             }
         }
     }
-
-
 }

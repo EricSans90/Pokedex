@@ -2,15 +2,10 @@ package com.example.pokedex.domain.usecases
 
 //Para obtener la lista de Pokémon
 
-import android.content.Context
-import com.example.pokedex.data.util.loadPokemonFromAssets
 import com.example.pokedex.domain.models.Pokemon
 import com.example.pokedex.domain.repositories.PokemonRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -25,14 +20,3 @@ class GetPokemonListUseCase @Inject constructor(
         }
     }
 }
-
-
-// Para API
-/*
-class GetPokemonListUseCase(private val pokemonRepository: PokemonRepository) {
-    //lógica para obtener la lista de Pokémon desde el repositorio
-    fun execute(): Flow<List<Pokemon>> {
-        return pokemonRepository.getPokemonList()
-    }
-}
- */

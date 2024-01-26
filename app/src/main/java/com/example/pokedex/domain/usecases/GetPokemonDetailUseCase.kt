@@ -5,10 +5,7 @@ package com.example.pokedex.domain.usecases
 import com.example.pokedex.domain.models.Pokemon
 import com.example.pokedex.domain.repositories.PokemonRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 
 // Interactuar con el repositorio para obtener los detalles de un Pokémon

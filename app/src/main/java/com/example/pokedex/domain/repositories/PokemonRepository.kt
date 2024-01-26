@@ -2,9 +2,7 @@ package com.example.pokedex.domain.repositories
 
 //Para abstraer las fuentes de datos y proveer datos al dominio
 
-import android.content.Context
 import com.example.pokedex.domain.models.Pokemon
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 
 interface PokemonRepository {
